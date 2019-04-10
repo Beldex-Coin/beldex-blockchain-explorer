@@ -25,7 +25,7 @@ rpccalls::rpccalls(string _daemon_url,
 }
 
 bool
-rpccalls::connect_to_loki_daemon()
+rpccalls::connect_to_beldex_daemon()
 {
     //std::lock_guard<std::mutex> guard(m_daemon_rpc_mutex);
 
@@ -45,7 +45,7 @@ rpccalls::get_current_height()
 
     std::lock_guard<std::mutex> guard(m_daemon_rpc_mutex);
 
-    if (!connect_to_loki_daemon())
+    if (!connect_to_beldex_daemon())
     {
         cerr << "get_current_height: not connected to daemon" << endl;
         return false;
@@ -57,7 +57,7 @@ rpccalls::get_current_height()
 
     if (!r)
     {
-        cerr << "Error connecting to Loki daemon at "
+        cerr << "Error connecting to Beldex daemon at "
              << daemon_url << endl;
         return 0;
     }
@@ -77,7 +77,7 @@ rpccalls::get_mempool(vector<tx_info>& mempool_txs)
     {
         std::lock_guard<std::mutex> guard(m_daemon_rpc_mutex);
 
-        if (!connect_to_loki_daemon())
+        if (!connect_to_beldex_daemon())
         {
             cerr << "get_mempool: not connected to daemon" << endl;
             return false;
@@ -90,7 +90,7 @@ rpccalls::get_mempool(vector<tx_info>& mempool_txs)
 
     if (!r || res.status != CORE_RPC_STATUS_OK)
     {
-        cerr << "Error connecting to Loki daemon at "
+        cerr << "Error connecting to Beldex daemon at "
              << daemon_url << endl;
         return false;
     }
@@ -124,7 +124,7 @@ rpccalls::commit_tx(tools::wallet2::pending_tx& ptx, string& error_msg)
 
     std::lock_guard<std::mutex> guard(m_daemon_rpc_mutex);
 
-    if (!connect_to_loki_daemon())
+    if (!connect_to_beldex_daemon())
     {
         cerr << "commit_tx: not connected to daemon" << endl;
         return false;
@@ -163,7 +163,7 @@ rpccalls::get_network_info(COMMAND_RPC_GET_INFO::response& response)
     {
         std::lock_guard<std::mutex> guard(m_daemon_rpc_mutex);
 
-        if (!connect_to_loki_daemon())
+        if (!connect_to_beldex_daemon())
         {
             cerr << "get_network_info: not connected to daemon" << endl;
             return false;
@@ -189,14 +189,14 @@ rpccalls::get_network_info(COMMAND_RPC_GET_INFO::response& response)
 
         if (!err.empty())
         {
-            cerr << "Error connecting to Loki daemon due to "
+            cerr << "Error connecting to Beldex daemon due to "
                  << err << endl;
             return false;
         }
     }
     else
     {
-        cerr << "Error connecting to Loki daemon at "
+        cerr << "Error connecting to Beldex daemon at "
              << daemon_url << endl;
         return false;
     }
@@ -223,7 +223,7 @@ rpccalls::get_staking_requirement(uint64_t height, COMMAND_RPC_GET_STAKING_REQUI
     {
         std::lock_guard<std::mutex> guard(m_daemon_rpc_mutex);
 
-        if (!connect_to_loki_daemon())
+        if (!connect_to_beldex_daemon())
         {
             cerr << "get_network_info: not connected to daemon" << endl;
             return false;
@@ -249,14 +249,14 @@ rpccalls::get_staking_requirement(uint64_t height, COMMAND_RPC_GET_STAKING_REQUI
 
         if (!err.empty())
         {
-            cerr << "Error connecting to Loki daemon due to "
+            cerr << "Error connecting to Beldex daemon due to "
                  << err << endl;
             return false;
         }
     }
     else
     {
-        cerr << "Error connecting to Loki daemon at "
+        cerr << "Error connecting to Beldex daemon at "
              << daemon_url << endl;
         return false;
     }
@@ -282,7 +282,7 @@ rpccalls::get_hardfork_info(COMMAND_RPC_HARD_FORK_INFO::response& response)
     {
         std::lock_guard<std::mutex> guard(m_daemon_rpc_mutex);
 
-        if (!connect_to_loki_daemon())
+        if (!connect_to_beldex_daemon())
         {
             cerr << "get_hardfork_info: not connected to daemon" << endl;
             return false;
@@ -309,14 +309,14 @@ rpccalls::get_hardfork_info(COMMAND_RPC_HARD_FORK_INFO::response& response)
 
         if (!err.empty())
         {
-            cerr << "Error connecting to Loki daemon due to "
+            cerr << "Error connecting to Beldex daemon due to "
                  << err << endl;
             return false;
         }
     }
     else
     {
-        cerr << "Error connecting to Loki daemon at "
+        cerr << "Error connecting to Beldex daemon at "
              << daemon_url << endl;
         return false;
     }
@@ -350,7 +350,7 @@ rpccalls::get_dynamic_per_kb_fee_estimate(
     {
         std::lock_guard<std::mutex> guard(m_daemon_rpc_mutex);
 
-        if (!connect_to_loki_daemon())
+        if (!connect_to_beldex_daemon())
         {
             cerr << "get_dynamic_per_kb_fee_estimate: not connected to daemon" << endl;
             return false;
@@ -377,14 +377,14 @@ rpccalls::get_dynamic_per_kb_fee_estimate(
 
         if (!err.empty())
         {
-            cerr << "Error connecting to Loki daemon due to "
+            cerr << "Error connecting to Beldex daemon due to "
                  << err << endl;
             return false;
         }
     }
     else
     {
-        cerr << "Error connecting to Loki daemon at "
+        cerr << "Error connecting to Beldex daemon at "
              << daemon_url << endl;
         return false;
     }
@@ -413,7 +413,7 @@ rpccalls::get_block(string const& blk_hash, block& blk, string& error_msg)
     {
         std::lock_guard<std::mutex> guard(m_daemon_rpc_mutex);
 
-        if (!connect_to_loki_daemon())
+        if (!connect_to_beldex_daemon())
         {
             cerr << "get_block: not connected to daemon" << endl;
             return false;
@@ -440,14 +440,14 @@ rpccalls::get_block(string const& blk_hash, block& blk, string& error_msg)
 
         if (!err.empty())
         {
-            cerr << "Error connecting to Loki daemon due to "
+            cerr << "Error connecting to Beldex daemon due to "
                  << err << endl;
             return false;
         }
     }
     else
     {
-        cerr << "get_staking_requirement: error connecting to Loki daemon at "
+        cerr << "get_staking_requirement: error connecting to Beldex daemon at "
              << daemon_url << endl;
         return false;
     }
@@ -461,12 +461,12 @@ rpccalls::get_block(string const& blk_hash, block& blk, string& error_msg)
 }
 
 bool
-rpccalls::get_service_node(COMMAND_RPC_GET_MASTER_NODES::response &res, const std::vector<std::string> &pubkeys)
+rpccalls::get_master_node(COMMAND_RPC_GET_MASTER_NODES::response &res, const std::vector<std::string> &pubkeys)
 {
     std::lock_guard<std::mutex> guard(m_daemon_rpc_mutex);
 
     bool result = false;
-    if (!connect_to_loki_daemon())
+    if (!connect_to_beldex_daemon())
     {
         cerr << "rpccalls::get_master_node_list_state: not connected to daemon" << endl;
         return result;
@@ -477,7 +477,7 @@ rpccalls::get_service_node(COMMAND_RPC_GET_MASTER_NODES::response &res, const st
     request.params.master_node_pubkeys = pubkeys;
     request.jsonrpc = "2.0";
     request.id      = epee::serialization::storage_entry(0);
-    request.method  = pubkeys.empty() ? "get_all_master_nodes" : "get_service_nodes";
+    request.method  = pubkeys.empty() ? "get_all_master_nodes" : "get_master_nodes";
 
     result = epee::net_utils::invoke_http_json("/json_rpc", request, response, m_http_client, timeout_time_ms);
 
@@ -493,7 +493,7 @@ rpccalls::get_quorum_state(COMMAND_RPC_GET_QUORUM_STATE::response &res, uint64_t
 {
     std::lock_guard<std::mutex> guard(m_daemon_rpc_mutex);
     bool result = false;
-    if (!connect_to_loki_daemon())
+    if (!connect_to_beldex_daemon())
     {
         cerr << "rpccalls::get_quorum_state: not connected to daemon" << endl;
         return result;
@@ -508,7 +508,7 @@ rpccalls::get_quorum_state(COMMAND_RPC_GET_QUORUM_STATE::response &res, uint64_t
 
     result = epee::net_utils::invoke_http_json("/json_rpc", request, response, m_http_client, timeout_time_ms);
     if (!result)
-        cerr << "Error connecting to Loki daemon at " << daemon_url << endl;
+        cerr << "Error connecting to Beldex daemon at " << daemon_url << endl;
 
     res = response.result;
     return result;
@@ -519,7 +519,7 @@ rpccalls::get_quorum_state_batched(COMMAND_RPC_GET_QUORUM_STATE_BATCHED::respons
 {
     std::lock_guard<std::mutex> guard(m_daemon_rpc_mutex);
     bool result = false;
-    if (!connect_to_loki_daemon())
+    if (!connect_to_beldex_daemon())
     {
         cerr << "rpccalls::get_quorum_state_batched: not connected to daemon" << endl;
         return result;
@@ -535,7 +535,7 @@ rpccalls::get_quorum_state_batched(COMMAND_RPC_GET_QUORUM_STATE_BATCHED::respons
 
     result = epee::net_utils::invoke_http_json("/json_rpc", request, response, m_http_client, timeout_time_ms);
     if (!result)
-        cerr << "Error connecting to Loki daemon at " << daemon_url << endl;
+        cerr << "Error connecting to Beldex daemon at " << daemon_url << endl;
 
     res = response.result;
     return result;

@@ -18,7 +18,7 @@ namespace lokeg
         p.add("txhash", -1);
 
         options_description desc(
-                "lokblocks, Onion Loki Blockchain Explorer");
+                "lokblocks, Onion Beldex Blockchain Explorer");
 
         desc.add_options()
                 ("help,h", value<bool>()->default_value(false)->implicit_value(true),
@@ -50,7 +50,7 @@ namespace lokeg
                 ("enable-autorefresh-option", value<bool>()->default_value(false)->implicit_value(true),
                  "enable users to have the index page on autorefresh")
                 ("enable-emission-monitor", value<bool>()->default_value(false)->implicit_value(true),
-                 "enable Loki total emission monitoring thread")
+                 "enable Beldex total emission monitoring thread")
                 ("port,p", value<string>()->default_value("8081"),
                  "default explorer port")
                 ("bindaddr,x", value<string>()->default_value("0.0.0.0"),
@@ -68,7 +68,7 @@ namespace lokeg
                 ("mempool-refresh-time", value<string>()->default_value("5"),
                  "time, in seconds, for each refresh of mempool state")
                 ("bc-path,b", value<string>(),
-                 "path to lmdb folder of the blockchain, e.g., ~/.Beldex/lmdb")
+                 "path to lmdb folder of the blockchain, e.g., ~/.beldex/lmdb")
                 ("ssl-crt-file", value<string>(),
                  "path to crt file for ssl (https) functionality")
                 ("ssl-key-file", value<string>(),

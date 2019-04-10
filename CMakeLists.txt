@@ -13,17 +13,17 @@ if (WIN32)
 endif()
 
 
-if (NOT LOKI_DIR)
-    set(LOKI_DIR ~/beldex)
+if (NOT BELDEX_DIR)
+    set(BELDEX_DIR ~/beldex)
 endif()
 
-message(STATUS LOKI_DIR ": ${LOKI_DIR}")
+message(STATUS BELDEX_DIR ": ${BELDEX_DIR}")
 
-set(LOKI_SOURCE_DIR ${LOKI_DIR}
+set(BELDEX_SOURCE_DIR ${BELDEX_DIR}
         CACHE PATH "Path to the root directory for Beldex")
 
 # set location of beldex build tree
-set(LOKI_BUILD_DIR ${LOKI_SOURCE_DIR}/build/Linux/dev/release/
+set(BELDEX_BUILD_DIR ${BELDEX_SOURCE_DIR}/build/Linux/dev/release/
         CACHE PATH "Path to the build directory for Beldex")
 
 set(MY_CMAKE_DIR "${CMAKE_CURRENT_LIST_DIR}/cmake"
@@ -31,7 +31,7 @@ set(MY_CMAKE_DIR "${CMAKE_CURRENT_LIST_DIR}/cmake"
 
 list(APPEND CMAKE_MODULE_PATH "${MY_CMAKE_DIR}")
 
-set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "${LOKI_BUILD_DIR}"
+set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "${BELDEX_BUILD_DIR}"
         CACHE PATH "Add Beldex directory for library searching")
 
 include(MyUtils)
@@ -62,7 +62,7 @@ endif()
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin" OR WIN32)
     add_library(unbound STATIC IMPORTED)
-    set_property(TARGET unbound PROPERTY IMPORTED_LOCATION ${LOKI_BUILD_DIR}/external/unbound/libunbound.a)
+    set_property(TARGET unbound PROPERTY IMPORTED_LOCATION ${BELDEX_BUILD_DIR}/external/unbound/libunbound.a)
 endif()
 
 
@@ -71,7 +71,7 @@ endif()
 include_directories(${Boost_INCLUDE_DIRS})
 
 # include monero
-include_directories(${LOKI_SOURCE_DIR}/build)
+include_directories(${BELDEX_SOURCE_DIR}/build)
 
 include_directories("ext/mstch/include")
 include_directories("ext/mstch/include/src")
