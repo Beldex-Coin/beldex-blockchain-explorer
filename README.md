@@ -176,7 +176,7 @@ lokblocks, Onion Loki Blockchain Explorer:
                                         functionality
   --ssl-key-file arg                    path to key file for ssl (https)
                                         functionality
-  -d [ --daemon-url ] arg (=http:://127.0.0.1:22023)
+  -d [ --daemon-url ] arg (=http:://127.0.0.1:19091)
                                         Loki daemon url
 ```
 

@@ -68,13 +68,13 @@ namespace lokeg
                 ("mempool-refresh-time", value<string>()->default_value("5"),
                  "time, in seconds, for each refresh of mempool state")
                 ("bc-path,b", value<string>(),
-                 "path to lmdb folder of the blockchain, e.g., ~/.loki/lmdb")
+                 "path to lmdb folder of the blockchain, e.g., ~/.Beldex/lmdb")
                 ("ssl-crt-file", value<string>(),
                  "path to crt file for ssl (https) functionality")
                 ("ssl-key-file", value<string>(),
                  "path to key file for ssl (https) functionality")
-                ("daemon-url,d", value<string>()->default_value("http:://127.0.0.1:22023"),
-                 "Loki daemon url");
+                ("daemon-url,d", value<string>()->default_value("http:://127.0.0.1:29091"),
+                 "Beldex daemon url");
 
 
         store(command_line_parser(acc, avv)
