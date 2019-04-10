@@ -47,8 +47,8 @@ struct has_destructor
 
 namespace cryptonote
 {
-// declare struct in loki's cryptonote namespace.
-// loki should provide definition for this,
+// declare struct in beldex's cryptonote namespace.
+// beldex should provide definition for this,
 // but we need to have it declared as we are going to
 // check if its definition exist or not. depending on this
 // we decide what gets to be defined as
@@ -85,7 +85,7 @@ public:
              uint64_t _timeout = 200000);
 
     bool
-    connect_to_loki_daemon();
+    connect_to_beldex_daemon();
 
     uint64_t
     get_current_height();
@@ -133,7 +133,7 @@ public:
         {
             std::lock_guard<std::mutex> guard(m_daemon_rpc_mutex);
 
-            if (!connect_to_loki_daemon())
+            if (!connect_to_beldex_daemon())
             {
                 cerr << "get_alt_blocks: not connected to daemon" << endl;
                 return false;
@@ -159,14 +159,14 @@ public:
 
             if (!err.empty())
             {
-                cerr << "Error connecting to Loki daemon due to "
+                cerr << "Error connecting to Beldex daemon due to "
                      << err << endl;
                 return false;
             }
         }
         else
         {
-            cerr << "Error connecting to Loki daemon at "
+            cerr << "Error connecting to Beldex daemon at "
                  << daemon_url << endl;
             return false;
         }
@@ -191,7 +191,7 @@ public:
 
     /// When `all` is set, ignore `pubkeys` and get info for all nodes
     bool
-    get_service_node(COMMAND_RPC_GET_MASTER_NODES::response &res, const std::vector<std::string> &pubkeys);
+    get_master_node(COMMAND_RPC_GET_MASTER_NODES::response &res, const std::vector<std::string> &pubkeys);
 
     bool
     get_quorum_state(COMMAND_RPC_GET_QUORUM_STATE::response &res, uint64_t height);
