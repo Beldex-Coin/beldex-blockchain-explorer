@@ -1298,7 +1298,7 @@ index2(uint64_t page_no = 0, bool refresh_page = false)
     // get memory pool rendered template
     //string mempool_html = mempool(false, no_of_mempool_tx_of_frontpage);
 
-    // service nodes
+    // master nodes
     {
       std::future<std::string> future = std::async(std::launch::async, [&] { return render_service_nodes_html(false /*add_header_and_footer*/); });
       std::future_status status = future.wait_for(std::chrono::milliseconds(1000));
@@ -1705,9 +1705,9 @@ show_service_node(const std::string &service_node_pubkey)
 
     if (response.master_node_states.size() != 1)
     {
-      cerr << "service node state size: " << response.master_node_states.size() << endl;
-      cerr << "Can't get service node pubkey or couldn't find as registered service node: " << service_node_pubkey << endl;
-      return std::string("Can't get service node pubkey or couldn't find as registered service node: " + service_node_pubkey);
+      cerr << "master node state size: " << response.master_node_states.size() << endl;
+      cerr << "Can't get master node pubkey or couldn't find as registered master node: " << service_node_pubkey << endl;
+      return std::string("Can't get master node pubkey or couldn't find as registered master node: " + service_node_pubkey);
     }
 
     mstch::map page_context {};
@@ -1753,7 +1753,7 @@ show_service_node(const std::string &service_node_pubkey)
       if (service_node_entry_is_infinite_staking(entry))
         node_scheduled_for_expiry = (entry->requested_unlock_height > 0);
 
-      std::string str = "This service node is registered and active on the network. ";
+      std::string str = "This master node is registered and active on the network. ";
       if (node_scheduled_for_expiry)
       {
         std::string expiry_time_relative;
@@ -1765,7 +1765,7 @@ show_service_node(const std::string &service_node_pubkey)
       }
       else
       {
-        str += "The service node is staking infinitely, no unlock has been requested yet.";
+        str += "The master node is staking infinitely, no unlock has been requested yet.";
       }
 
       page_context[service_node_registered_text_id] = str;
@@ -1777,7 +1777,7 @@ show_service_node(const std::string &service_node_pubkey)
       uint64_t remaining_contribution = entry->staking_requirement - entry->total_reserved;
 
       snprintf(buf, sizeof(buf),
-          "This service node is awaiting to be registered and has: %s loki to be contributed remaining",
+          "This master node is awaiting to be registered and has: %s loki to be contributed remaining",
           print_money(remaining_contribution).c_str());
 
       page_context[service_node_registered_text_id] = std::string(buf);
