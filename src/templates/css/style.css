@@ -1,0 +1,200 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-size: 80%;
+    background-color: white;
+    font-family: sans-serif;
+    color: black;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    text-align: left;
+    font-weight: normal;
+    margin-bottom: 0.2em;
+}
+
+.Subtitle {
+    font-size: 1.0em;
+    color: rgba(12, 12, 12, 0.89);
+    margin: 0;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.PageButton {
+    background-color: #2bab64;
+    min-height: 1.5em;
+    padding: 5px;
+    padding-top: 8px;
+    margin-right: 1em;
+    font-weight: bold;
+    font-size: 1em;
+    color: white;
+    border: none;
+    font-family: sans-serif;
+}
+
+.PageButton:hover {
+    background-color: rgba(0, 106, 27, 1);
+}
+
+.Wrapper {
+    width: 80%;
+    margin: auto;
+}
+
+.Header {
+    margin: 0;
+}
+
+.Header > a:link {
+    text-decoration: none;
+    color: black; !important
+}
+
+.Table {
+    width: 100%;
+}
+
+.TableHeader {
+    font-weight: bold;
+    background-color: #2bab64;
+    color: #fff;
+}
+
+.TitleDivider {
+    height: 2px;
+    width: 100%;
+    background-color: #2bab64;
+    margin-bottom: 1em;
+}
+
+.LinkNoUnderline {
+    text-decoration: none;
+    color: #fff !important;
+}
+
+.LinkNoUnderline:hover {
+    color: black;
+}
+
+.center {
+    margin: auto;
+    width: 96%;
+    /*border: 1px solid #73AD21;
+    padding: 10px;*/
+}
+
+tr, li, #pages, .info {
+    height: 2em;
+    margin: auto;
+}
+
+#pages {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    display: flex;
+    justify-content: center;
+}
+
+td {
+    text-align: center;
+}
+
+a:link, a:visited {
+    text-decoration: underline;
+    color: black;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #2bab64;
+}
+
+form {
+    display: inline-block;
+}
+
+.style-1 input[type="text"] {
+    padding: 2px;
+    border: solid 1px #2bab64;
+    background-color: white;
+    height: 2em;
+    width: 80%;
+    font-size: 1em;
+    color: blak;
+}
+
+.style-1 input[type="text"]:focus,
+.style-1 input[type="text"].focus {
+    border: solid 1px #2bab64;
+}
+h1, h2, h3, h4, h5, h6 { color: black; }
+
+.tabs {
+    position: relative;
+    min-height: 220px; /* This part sucks */
+    clear: both;
+    margin: 25px 0;
+}
+
+.tab {
+    float: left;
+}
+
+.tab label {
+    background: #2bab64;
+    padding: 10px;
+    margin-right: 2px;
+    margin-left: -1px;
+    position: relative;
+    left: 1px;
+}
+
+.tab [type=radio] {
+    display: none;
+}
+
+.content {
+    position: absolute;
+    top: 28px;
+    left: 0;
+    background: white;
+    right: 0;
+    bottom: 0;
+    padding-top: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    border-top: 2px solid #2bab64;
+}
+
+[type=radio]:checked ~ label {
+    background: #2bab64 ;
+    z-index: 2;
+}
+
+[type=radio]:checked ~ label ~ .content {
+    z-index: 1;
+}
+
+input#toggle-1[type=checkbox] {
+    position: absolute;
+    /*top: -9999px;*/
+    left: -9999px;
+
+}
+label#show-decoded-inputs {
+    /*-webkit-appearance: push-button;*/
+    /*-moz-appearance: button;*/
+    /*margin: 60px 0 10px 0;*/
+    cursor: pointer;
+    display: block;
+}
+
+div#decoded-inputs{
+}
+
+/* Toggled State */
+input#toggle-1[type=checkbox]:checked ~ div#decoded-inputs {
+    display: block;
+}

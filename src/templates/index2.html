@@ -1,0 +1,149 @@
+
+<div class="Wrapper">
+     <p>
+        Server Time: {{server_timestamp}}  | <a href="/txpool">Transaction Pool</a>
+         {{#enable_pusher}}
+            | <a href="/rawtx">Transaction pusher </a>
+         {{/enable_pusher}}
+         {{#enable_key_image_checker}}
+            | <a href="/rawkeyimgs">Key images checker</a>
+         {{/enable_key_image_checker}}
+         {{#enable_output_key_checker}}
+            | <a href="/rawoutputkeys">Output keys checker</a>
+         {{/enable_output_key_checker}}
+         {{#enable_autorefresh_option}}
+             |
+            {{#refresh}}
+                <a href="/">Autorefresh is ON (10 s)</a>
+            {{/refresh}}
+            {{^refresh}}
+               <a href="/autorefresh">Autorefresh is OFF</a>
+            {{/refresh}}
+         {{/enable_autorefresh_option}}
+         {{#testnet_url}}
+            | <a href="{{testnet_url}}">Go to testnet explorer</a>
+         {{/testnet_url}}
+         {{#stagenet_url}}
+            | <a href="{{stagenet_url}}">Go to stagenet explorer</a>
+         {{/stagenet_url}}
+         {{#mainnet_url}}
+            | <a href="{{mainnet_url}}">Go to mainnet explorer</a>
+         {{/mainnet_url}}
+         {{#testnet}}
+            | This is <span style="color:#ff6b62">testnet</span> blockchain
+         {{/testnet}}
+         {{#stagenet}}
+            | This is <span style="color:#ff6b62">stagenet</span> blockchain
+         {{/stagenet}}
+
+        </p>
+
+
+    {{#network_info}}
+        <h3 style="font-size: 12px; margin-top: 5px; margin-bottom: 3">
+            Network difficulty: {{difficulty}}
+            | Hard fork: v{{current_hf_version}}
+            | Hash rate: {{hash_rate}}
+            <!-- | Staking Requirement: {{staking_requirement}} -->
+            | Fee per byte: {{fee_per_kb}}
+            | Median block size limit: {{block_size_limit}} kB
+            | Total blockchain size: {{total_blockchain_size}} GB
+            {{^is_current_info}}
+            | Data From {{age}} {{age_format}} ago
+            {{/is_current_info}}
+        </p>
+    {{/network_info}}
+
+    {{#emission}}
+        <!-- <p style="margin-top: 2px">
+            Circulating Supply: {{circulating_supply}}
+            {{^circulating_supply_is_up_to_date}}
+            <span style="color:#ff6b62">(calculating)</span>
+            {{/circulating_supply_is_up_to_date}}
+            | Beldex emission (fees) is {{amount}} ({{fee_amount}}) as of {{blk_no}} block
+        </p> -->
+    {{/emission}}
+</div>
+
+    {{{mempool_info}}}
+
+    <div class="Wrapper">
+        {{#is_page_zero}}
+            <h2>Transactions In The Last {{no_of_last_blocks}} Blocks</h2>
+            <div class="TitleDivider"></div>
+        {{/is_page_zero}}
+        {{^is_page_zero}}
+            <h2>Transactions In Older Blocks</h2>
+        {{/is_page_zero}}
+
+        <h4 class="Subtitle">(Median size of 100 blocks: {{blk_size_median}} kB)</h4>
+        <div class="TitleDivider"></div>
+
+        <table class="Table">
+            <tr class="TableHeader">
+                <td>Height</td>
+                <td>Age {{age_format}}<!--(Δm)--></td>
+                <td>Size [kB]<!--(Δm)--></td>
+                <td>Transaction Hash</td>
+                <td>Fee [µL]</td>
+                <td>Outputs</td>
+                <td>In/Out/PID</td>
+                <td>TX Size [kB]</td>
+            </tr>
+            {{#txs}}
+            <tr>
+                <td><a href="/block/{{height}}">{{height}}</a></td>
+                <td>{{age}}<!--{{time_delta}}--></td>
+                <td>{{blk_size}}</td>
+                <td><a href="/tx/{{hash}}">{{hash}}</a></td>
+                <td>{{fee_micro}}</td>
+                <td>{{sum_outputs_short}}</td>
+                <td>{{no_inputs}}/{{no_outputs}}/{{pID}}</td>
+                <td>{{tx_size_short}}</td>
+            </tr>
+            {{/txs}}
+        </table>
+
+        <div id="pages" class="center" style="text-align: center;">
+         {{^is_page_zero}}
+             <a class="LinkNoUnderline" href="/page/{{prev_page}}">
+                 <div class="PageButton">
+                     Prev
+                 </div>
+             </a>
+
+         {{/is_page_zero}}
+            <div class="PageButton">
+                Current Page: <a class="LinkNoUnderline" href="/">{{page_no}}</a>/<a class="LinkNoUnderline" href="/page/{{total_page_no}}">{{total_page_no}}</a>
+            </div>
+            <a class="LinkNoUnderline" href="/page/{{next_page}}">
+                <div class="PageButton">
+                    Next
+                </div>
+            </a>
+        </div>
+    </div>
+
+    {{{service_node_summary}}}
+    <div class="Wrapper">
+      <p> <a class="" href="/service_nodes">Click here to see the master node list (at most only 10 are shown here)</a> </p>
+    </div>
+
+    {{{quorum_state_summary}}}
+    <div class="Wrapper">
+      <p> Note: The quorum shown here is the currently active voting height
+      which is not necessarily the latest quorum. Quorums can only be voted on
+      after a number of blocks have transpired.</p>
+      <p> <a class="" href="/quorums">Click here to see the last 1hrs worth of the stored quorum states</a> </p>
+    </div>
+
+{{#show_cache_times}}
+    <div class="center">
+        <h6 style="margin-top: 1px;color:#949490">
+            Tx details construction time: {{construction_time_total}} s
+            <br/>
+            includes {{construction_time_cached}} s from block cache ({{cache_hits}} hits)
+            and {{construction_time_non_cached}} s from non cache ({{cache_misses}} misses)
+        </h6>
+    </div>
+{{/show_cache_times}}

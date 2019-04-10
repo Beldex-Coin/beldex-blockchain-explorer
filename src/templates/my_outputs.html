@@ -1,0 +1,166 @@
+
+<div class="Wrapper">
+    <H4 style="margin:5px">TX Hash: <a href="/tx/{{tx_hash}}">{{tx_hash}}</a></H4>
+    <h4 style="margin:5px">TX Public Key: {{tx_pub_key}}</h4>
+    {{#has_payment_id}}
+        <h4 style="margin:5px">Payment ID: {{payment_id}}</h4>
+    {{/has_payment_id}}
+
+    {{#has_payment_id8}}
+        {{^decrypted_payment_id8}}
+            <h4 style="margin:5px">Payment ID (Encrypted): {{payment_id8}}</h4>
+        {{/decrypted_payment_id8}}
+        {{#decrypted_payment_id8}}
+            <h4 style="margin:5px">Payment ID (Decrypted): {{decrypted_payment_id8}}
+                (Value incorrect if you are not the recipient of the TX)</h4>
+        {{/decrypted_payment_id8}}
+    {{/has_payment_id8}}
+
+
+    <h2>Metadata</h2>
+    <div class="TitleDivider"></div>
+    <table class="Table" style="margin-top:10px">
+        <tr>
+            <td>Block: {{blk_height}}</td>
+            <td>Timestamp [UCT]: {{blk_timestamp}}</td>
+            <td>Age [y:d:h:m:s]: {{delta_time}}</td>
+            <td>Fee: {{tx_fee}}</td>
+            <td>TX Size: {{tx_size}} kB</td>
+        </tr>
+    </table>
+
+    {{^tx_prove}}
+        <p>Checking which outputs belong to the given address and viewkey</p>
+        <p>Address: {{lok_address}}</p>
+        <p>Viewkey: {{viewkey}}</p>
+    {{/tx_prove}}
+    {{#tx_prove}}
+        <p>Prove that you send this tx to the given address</p>
+        <p>Address: {{lok_address}}</p>
+        <p>TX Private Key: {{viewkey}}</p>
+    {{/tx_prove}}
+
+    <h2>Outputs ({{outputs_no}})</h2>
+    <div class="TitleDivider"></div>
+    <div>
+        <table class="Table" >
+            <tr class="TableHeader">
+                <td>Output Public Key</td>
+                <td>Amount</td>
+                <td>Output Match?</td>
+            </tr>
+            {{#outputs}}
+            <tr>
+                <td>{{output_idx}}: {{out_pub_key}}</td>
+                <td>{{amount}}</td>
+                {{#mine_output}}
+                <td>
+                        <span style="color: #008009;font-weight: bold">
+                        {{mine_output}}
+                        </span>
+                </td>
+                {{/mine_output}}
+                {{^mine_output}}
+                    <td>{{mine_output}}</td>
+                {{/mine_output}}
+            </tr>
+            {{/outputs}}
+        </table>
+
+        <p>
+            Sum BDX from matched outputs (i.e., incoming BDX):
+            {{#found_our_outputs}}
+                {{sum_lok}}
+            {{/found_our_outputs}}
+            {{^found_our_outputs}}
+                0.000000000000
+            {{/found_our_outputs}}
+        </p>
+        <p>
+            <a href="{{shortcut_url}}" target="_blank">Link to this page</a>
+        </p>
+    </div>
+
+    {{#show_inputs}}
+    <br/>
+    <label id="show-decoded-inputs" for="toggle-1">Show decoded inputs</label>
+    <input type="checkbox" id="toggle-1">
+
+    <div id="decoded-inputs">
+    <h3>Inputs ({{inputs_no}})</h3>
+        <div class="center">
+            {{#inputs}}
+                <h4>Key image: {{key_image}}, amount {{key_image_amount}}</h4>
+                {{#mixins}}
+                    {{#has_mixin_outputs}}
+                        {{#mixin_outputs}}
+                        <div class="center">
+                            <table class="center">
+                              <tr>
+                                  <td style="text-align: center;">
+                                      Ring member {{mixin_pub_key}} might use your outputs
+                                      <br/>
+                                      from tx of hash: <a href="/tx/{{mix_tx_hash}}">{{mix_tx_hash}}</a>
+                                      <br/>(tx public key: {{mix_tx_pub_key}})
+                                  </td>
+                              </tr>
+                            {{#has_found_outputs}}
+                                <tr><td>
+                                    <div class="center">
+                                        <table class="center">
+                                            <tr>
+                                                <td>output public key</td>
+                                                <td>amount</td>
+                                                <td>output match?</td>
+                                            </tr>
+                                        {{#found_outputs}}
+                                                <tr>
+                                                    <td>{{my_public_key}}</td>
+                                                    <td>{{amount}}</td>
+                                                    <td>
+                                                        {{#mine_output}}
+                                                            <span style="color: #008009;font-weight: bold">{{mine_output}}</span>{{#out_in_match}}*{{/out_in_match}}
+                                                        {{/mine_output}}
+                                                        {{^mine_output}}
+                                                            {{mine_output}}
+                                                        {{/mine_output}}
+                                                    </td>
+                                                </tr>
+                                        {{/found_outputs}}
+                                        </table>
+                                    </div>
+                                </td></tr>
+                            {{/has_found_outputs}}
+                           </table>
+                        </div>
+                        {{/mixin_outputs}}
+                    {{/has_mixin_outputs}}
+                {{/mixins}}
+            {{/inputs}}
+
+        </div>
+        <h3>
+            Sum BDX from matched and marked by * ring member's outputs: {{sum_mixin_lok}}
+            <br/>
+            <span> Possible spending is:
+                {{possible_spending}} (tx fee included)
+            </span>
+                <br/>
+            <span>Note: without private spendkey,
+                it is impossible to know whether this is your real spending. <br/>
+                So do not take this number seriously.
+                It is probably totally wrong anyway.</span>
+               <br/>
+               <span style="font-size: 14px">
+                 Number of possible our mixins is {{no_all_possible_mixins}}
+                      for {{all_possible_mixins_amount}} bdx
+                      (amount as uint64).
+               </span>
+        </h3>
+    </div>
+
+    {{/show_inputs}}
+
+
+</div>
+<br/>
