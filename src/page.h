@@ -59,8 +59,8 @@
 #define TMPL_MY_CHECKRAWKEYIMGS     TMPL_DIR "/checkrawkeyimgs.html"
 #define TMPL_MY_RAWOUTPUTKEYS       TMPL_DIR "/rawoutputkeys.html"
 #define TMPL_MY_CHECKRAWOUTPUTKEYS  TMPL_DIR "/checkrawoutputkeys.html"
-#define TMPL_SERVICE_NODES          TMPL_DIR "/service_nodes.html"
-#define TMPL_SERVICE_NODE_DETAIL    TMPL_DIR "/service_node_detail.html"
+#define TMPL_MASTER_NODES          TMPL_DIR "/master_nodes.html"
+#define TMPL_MASTER_NODE_DETAIL    TMPL_DIR "/master_node_detail.html"
 #define TMPL_QUORUM_STATES          TMPL_DIR "/quorum_states.html"
 
 #define JS_JQUERY   TMPL_DIR "/js/jquery.min.js"
@@ -350,7 +350,7 @@ struct tx_details
     ~tx_details() {};
 };
 
-typedef struct ServiceNodeContext
+typedef struct MasterNodeContext
 {
     std::string html_context;
     std::string html_full_context;
@@ -364,7 +364,7 @@ static const bool FULL_AGE_FORMAT {true};
 
 MicroCore* mcore;
 Blockchain* core_storage;
-ServiceNodeContext snode_context;
+MasterNodeContext snode_context;
 QuorumStateContext quorum_state_context;
 rpccalls rpc;
 
@@ -495,11 +495,11 @@ page(MicroCore* _mcore,
     template_file["altblocks"]       = get_full_page(lokeg::read(TMPL_ALTBLOCKS));
     template_file["mempool_error"]   = lokeg::read(TMPL_MEMPOOL_ERROR);
     template_file["mempool_full"]    = get_full_page(template_file["mempool"]);
-    template_file["service_nodes"]   = lokeg::read(TMPL_SERVICE_NODES);
+    template_file["master_nodes"]   = lokeg::read(TMPL_MASTER_NODES);
     template_file["quorum_states"]   = lokeg::read(TMPL_QUORUM_STATES);
     template_file["quorum_states_full"]  = get_full_page(lokeg::read(TMPL_QUORUM_STATES));
-    template_file["service_nodes_full"]  = get_full_page(lokeg::read(TMPL_SERVICE_NODES));
-    template_file["service_node_detail"] = get_full_page(lokeg::read(TMPL_SERVICE_NODE_DETAIL));
+    template_file["master_nodes_full"]  = get_full_page(lokeg::read(TMPL_MASTER_NODES));
+    template_file["master_node_detail"] = get_full_page(lokeg::read(TMPL_MASTER_NODE_DETAIL));
     template_file["block"]           = get_full_page(lokeg::read(TMPL_BLOCK));
     template_file["tx"]              = get_full_page(lokeg::read(TMPL_TX));
     template_file["my_outputs"]      = get_full_page(lokeg::read(TMPL_MY_OUTPUTS));
@@ -582,7 +582,7 @@ int portions_to_percent(uint64_t portions)
     return result;
 }
 
-time_t calculate_service_node_expiry_timestamp(uint64_t registration_height)
+time_t calculate_master_node_expiry_timestamp(uint64_t registration_height)
 {
     uint64_t curr_height   = core_storage->get_current_blockchain_height();
     uint64_t expiry_height = registration_height;
@@ -593,7 +593,7 @@ time_t calculate_service_node_expiry_timestamp(uint64_t registration_height)
     return result;
 }
 
-void generate_service_node_mapping(mstch::array *array, bool on_homepage, std::vector<COMMAND_RPC_GET_MASTER_NODES::response::entry *> const *entries)
+void generate_master_node_mapping(mstch::array *array, bool on_homepage, std::vector<COMMAND_RPC_GET_MASTER_NODES::response::entry *> const *entries)
 {
     static std::string end_of_queue = "End Of Queue";
     size_t iterate_count = on_homepage ? snode_context.num_entries_on_front_page : entries->size();
@@ -614,7 +614,7 @@ void generate_service_node_mapping(mstch::array *array, bool on_homepage, std::v
         int operator_cut_in_percent = portions_to_percent(entry->portions_for_operator);
 
         std::string expiration_time_relative;
-        std::string expiration_time_str = make_service_node_expiry_time_str(entry, &expiration_time_relative);
+        std::string expiration_time_str = make_master_node_expiry_time_str(entry, &expiration_time_relative);
 
         mstch::map array_entry
         {
@@ -636,18 +636,18 @@ void generate_service_node_mapping(mstch::array *array, bool on_homepage, std::v
 }
 
 std::string
-render_service_nodes_html(bool add_header_and_footer)
+render_master_nodes_html(bool add_header_and_footer)
 {
     bool on_homepage = !add_header_and_footer;
 
     COMMAND_RPC_GET_MASTER_NODES::response response;
-    if (!rpc.get_service_node(response, {}))
+    if (!rpc.get_master_node(response, {}))
     {
       return (on_homepage) ? snode_context.html_context : snode_context.html_full_context;
     }
 
-    char const active_array_id[]   = "service_node_active_array";
-    char const awaiting_array_id[] = "service_node_awaiting_array";
+    char const active_array_id[]   = "master_node_active_array";
+    char const awaiting_array_id[] = "master_node_awaiting_array";
 
     mstch::map page_context;
     page_context.emplace(active_array_id, mstch::array());
@@ -694,20 +694,20 @@ render_service_nodes_html(bool add_header_and_footer)
 
     mstch::array& active_array   = boost::get<mstch::array>(page_context[active_array_id]);
     mstch::array& awaiting_array = boost::get<mstch::array>(page_context[awaiting_array_id]);
-    generate_service_node_mapping(&awaiting_array, on_homepage, &unregistered);
-    generate_service_node_mapping(&active_array, on_homepage, &registered);
-    page_context["service_node_active_size"]   = (int) registered.size();
-    page_context["service_node_awaiting_size"] = (int) unregistered.size();
+    generate_master_node_mapping(&awaiting_array, on_homepage, &unregistered);
+    generate_master_node_mapping(&active_array, on_homepage, &registered);
+    page_context["master_node_active_size"]   = (int) registered.size();
+    page_context["master_node_awaiting_size"] = (int) unregistered.size();
 
     if (on_homepage)
     {
-      snode_context.html_context = mstch::render(template_file["service_nodes"], page_context);
+      snode_context.html_context = mstch::render(template_file["master_nodes"], page_context);
       return snode_context.html_context;
     }
     else
     {
       add_css_style(page_context);
-      snode_context.html_full_context = mstch::render(template_file["service_nodes_full"], page_context);
+      snode_context.html_full_context = mstch::render(template_file["master_nodes_full"], page_context);
       return snode_context.html_full_context;
     }
 }
@@ -728,13 +728,13 @@ std::string last_uptime_proof_to_string(time_t uptime_proof)
 
 using sn_entry_map = std::unordered_map<std::string, COMMAND_RPC_GET_MASTER_NODES::response::entry>;
 
-static bool service_node_entry_is_infinite_staking(COMMAND_RPC_GET_MASTER_NODES::response::entry const *entry)
+static bool master_node_entry_is_infinite_staking(COMMAND_RPC_GET_MASTER_NODES::response::entry const *entry)
 {
   bool result = entry->contributors[0].locked_contributions.size() > 0;
   return result;
 }
 
-std::string make_service_node_expiry_time_str(COMMAND_RPC_GET_MASTER_NODES::response::entry const *entry, std::string *expiry_time_relative)
+std::string make_master_node_expiry_time_str(COMMAND_RPC_GET_MASTER_NODES::response::entry const *entry, std::string *expiry_time_relative)
 {
   std::string result;
   uint64_t expiry_height = 0;
@@ -746,7 +746,7 @@ std::string make_service_node_expiry_time_str(COMMAND_RPC_GET_MASTER_NODES::resp
 
   if (expiry_height > 0)
   {
-    time_t expiry_time = calculate_service_node_expiry_timestamp(entry->registration_height);
+    time_t expiry_time = calculate_master_node_expiry_timestamp(entry->registration_height);
     get_human_readable_timestamp(expiry_time, &result);
     if (expiry_time_relative)
       *expiry_time_relative = std::string(get_human_time_ago(expiry_time, time(nullptr)));
@@ -781,7 +781,7 @@ void gather_sn_data(const std::vector<std::string>& nodes, const sn_entry_map& s
         else
         {
             std::string expiration_time_relative;
-            std::string expiration_time_str = make_service_node_expiry_time_str(&it->second, &expiration_time_relative);
+            std::string expiration_time_str = make_master_node_expiry_time_str(&it->second, &expiration_time_relative);
 
             array_entry.emplace("last_uptime_proof",        last_uptime_proof_to_string(it->second.last_uptime_proof));
             array_entry.emplace("expiration_date",          expiration_time_str);
@@ -823,7 +823,7 @@ render_quorum_states_html(bool add_header_and_footer)
     rpc.get_quorum_state_batched(batched_response, block_height - num_quorums_to_render, block_height);
 
     COMMAND_RPC_GET_MASTER_NODES::response sn_response = {};
-    rpc.get_service_node(sn_response, {});
+    rpc.get_master_node(sn_response, {});
 
     sn_entry_map pk2sninfo;
 
@@ -891,7 +891,7 @@ index2(uint64_t page_no = 0, bool refresh_page = false)
     {
         json j_info;
 
-        get_loki_network_info(j_info);
+        get_beldex_network_info(j_info);
 
         return j_info;
     });
@@ -1298,13 +1298,13 @@ index2(uint64_t page_no = 0, bool refresh_page = false)
     // get memory pool rendered template
     //string mempool_html = mempool(false, no_of_mempool_tx_of_frontpage);
 
-    // service nodes
+    // master nodes
     {
-      std::future<std::string> future = std::async(std::launch::async, [&] { return render_service_nodes_html(false /*add_header_and_footer*/); });
+      std::future<std::string> future = std::async(std::launch::async, [&] { return render_master_nodes_html(false /*add_header_and_footer*/); });
       std::future_status status = future.wait_for(std::chrono::milliseconds(1000));
 
       if (status == std::future_status::ready)
-        context["service_node_summary"] = future.get();
+        context["master_node_summary"] = future.get();
     }
 
     // quorum states
@@ -1683,7 +1683,7 @@ show_block(uint64_t _blk_height)
     context["sum_fees"]
             = lokeg::lok_amount_to_str(sum_fees, "{:0.6f}", false);
 
-    // get loki in the block reward
+    // get beldex in the block reward
     context["blk_reward"]
             = lokeg::lok_amount_to_str(txd_coinbase.lok_outputs - sum_fees, "{:0.6f}");
 
@@ -1694,20 +1694,20 @@ show_block(uint64_t _blk_height)
 }
 
 string
-show_service_node(const std::string &service_node_pubkey)
+show_master_node(const std::string &master_node_pubkey)
 {
     COMMAND_RPC_GET_MASTER_NODES::response response;
-    if (!rpc.get_service_node(response, {service_node_pubkey}))
+    if (!rpc.get_master_node(response, {master_node_pubkey}))
     {
-      cerr << "Failed to rpc with daemon " << service_node_pubkey << endl;
-      return std::string("Failed to rpc with daemon " + service_node_pubkey);
+      cerr << "Failed to rpc with daemon " << master_node_pubkey << endl;
+      return std::string("Failed to rpc with daemon " + master_node_pubkey);
     }
 
     if (response.master_node_states.size() != 1)
     {
-      cerr << "service node state size: " << response.master_node_states.size() << endl;
-      cerr << "Can't get service node pubkey or couldn't find as registered service node: " << service_node_pubkey << endl;
-      return std::string("Can't get service node pubkey or couldn't find as registered service node: " + service_node_pubkey);
+      cerr << "master node state size: " << response.master_node_states.size() << endl;
+      cerr << "Can't get master node pubkey or couldn't find as registered master node: " << master_node_pubkey << endl;
+      return std::string("Can't get master node pubkey or couldn't find as registered master node: " + master_node_pubkey);
     }
 
     mstch::map page_context {};
@@ -1731,9 +1731,9 @@ show_service_node(const std::string &service_node_pubkey)
     page_context["register_height"]      = entry->registration_height;
 
     // Make contributor render data
-    char const service_node_contributors_array_id[] = "service_node_contributors_array";
-    page_context.emplace(service_node_contributors_array_id, mstch::array{});
-    mstch::array& contributors = boost::get<mstch::array>(page_context[service_node_contributors_array_id]);
+    char const master_node_contributors_array_id[] = "master_node_contributors_array";
+    page_context.emplace(master_node_contributors_array_id, mstch::array{});
+    mstch::array& contributors = boost::get<mstch::array>(page_context[master_node_contributors_array_id]);
     for (COMMAND_RPC_GET_MASTER_NODES::response::contributor const &contributor : entry->contributors)
     {
       mstch::map array_entry
@@ -1746,18 +1746,18 @@ show_service_node(const std::string &service_node_pubkey)
       contributors.push_back(array_entry);
     }
 
-    char const service_node_registered_text_id[] = "service_node_registered_text";
+    char const master_node_registered_text_id[] = "master_node_registered_text";
     if (entry->total_contributed == entry->staking_requirement)
     {
       bool node_scheduled_for_expiry = true;
-      if (service_node_entry_is_infinite_staking(entry))
+      if (master_node_entry_is_infinite_staking(entry))
         node_scheduled_for_expiry = (entry->requested_unlock_height > 0);
 
-      std::string str = "This service node is registered and active on the network. ";
+      std::string str = "This master node is registered and active on the network. ";
       if (node_scheduled_for_expiry)
       {
         std::string expiry_time_relative;
-        std::string expiry_time_str = make_service_node_expiry_time_str(entry, &expiry_time_relative);
+        std::string expiry_time_str = make_master_node_expiry_time_str(entry, &expiry_time_relative);
         str += "It is scheduled to expire on the ";
         str += expiry_time_str;
         str += " or ";
@@ -1765,10 +1765,10 @@ show_service_node(const std::string &service_node_pubkey)
       }
       else
       {
-        str += "The service node is staking infinitely, no unlock has been requested yet.";
+        str += "The master node is staking infinitely, no unlock has been requested yet.";
       }
 
-      page_context[service_node_registered_text_id] = str;
+      page_context[master_node_registered_text_id] = str;
     }
     else
     {
@@ -1777,14 +1777,14 @@ show_service_node(const std::string &service_node_pubkey)
       uint64_t remaining_contribution = entry->staking_requirement - entry->total_reserved;
 
       snprintf(buf, sizeof(buf),
-          "This service node is awaiting to be registered and has: %s loki to be contributed remaining",
+          "This master node is awaiting to be registered and has: %s beldex to be contributed remaining",
           print_money(remaining_contribution).c_str());
 
-      page_context[service_node_registered_text_id] = std::string(buf);
+      page_context[master_node_registered_text_id] = std::string(buf);
     }
 
     add_css_style(page_context);
-    return mstch::render(template_file["service_node_detail"], page_context);
+    return mstch::render(template_file["master_node_detail"], page_context);
 }
 
 string
@@ -2548,7 +2548,7 @@ show_my_outputs(string tx_hash_str,
 
     if (lok_address_str.empty())
     {
-        return string("Loki address not provided!");
+        return string("Beldex address not provided!");
     }
 
     if (viewkey_str.empty())
@@ -2568,13 +2568,13 @@ show_my_outputs(string tx_hash_str,
         return string("Cant get tx hash due to parse error: " + tx_hash_str);
     }
 
-    // parse string representing given loki address
+    // parse string representing given beldex address
     cryptonote::address_parse_info address_info;
 
     if (!lokeg::parse_str_address(lok_address_str,  address_info, nettype))
     {
         cerr << "Cant parse string address: " << lok_address_str << endl;
-        return string("Cant parse Loki address: " + lok_address_str);
+        return string("Cant parse Beldex address: " + lok_address_str);
     }
 
     // parse string representing given private key
@@ -4048,7 +4048,7 @@ show_pushrawtx(string raw_tx_data, string action)
         ptx_vector.push_back({});
         ptx_vector.back().tx = parsed_tx;
     }
-    // if failed, treat raw_tx_data as base64 encoding of signed_loki_tx
+    // if failed, treat raw_tx_data as base64 encoding of signed_beldex_tx
     else
     {
         string decoded_raw_tx_data = epee::string_encoding::base64_decode(raw_tx_data);
@@ -4702,11 +4702,11 @@ search(string search_text)
     result_html = default_txt;
 
 
-    // check if loki address is given based on its length
+    // check if beldex address is given based on its length
     // if yes, then we can only show its public components
     if (search_str_length == 95)
     {
-        // parse string representing given loki address
+        // parse string representing given beldex address
         address_parse_info address_info;
 
         cryptonote::network_type nettype_addr {cryptonote::network_type::MAINNET};
@@ -4726,7 +4726,7 @@ search(string search_text)
         return show_address_details(address_info, nettype_addr);
     }
 
-    // check if integrated loki address is given based on its length
+    // check if integrated beldex address is given based on its length
     // if yes, then show its public components search tx based on encrypted id
     if (search_str_length == 106)
     {
@@ -5247,7 +5247,7 @@ json_rawtransaction(string tx_hash_str)
         }
     }
 
-    // get raw tx json as in loki
+    // get raw tx json as in beldex
 
     try
     {
@@ -5535,7 +5535,7 @@ json_rawblock(string block_no_or_hash)
         return j_response;
     }
 
-    // get raw tx json as in loki
+    // get raw tx json as in beldex
 
     try
     {
@@ -5879,7 +5879,7 @@ json_outputs(string tx_hash_str,
     if (address_str.empty())
     {
         j_response["status"]  = "error";
-        j_response["message"] = "Loki address not provided";
+        j_response["message"] = "Beldex address not provided";
         return j_response;
     }
 
@@ -5910,13 +5910,13 @@ json_outputs(string tx_hash_str,
         return j_response;
     }
 
-    // parse string representing given loki address
+    // parse string representing given beldex address
     address_parse_info address_info;
 
     if (!lokeg::parse_str_address(address_str,  address_info, nettype))
     {
         j_response["status"]  = "error";
-        j_response["message"] = "Cant parse Loki address: " + address_str;
+        j_response["message"] = "Cant parse Beldex address: " + address_str;
         return j_response;
 
     }
@@ -6104,7 +6104,7 @@ json_outputsblocks(string _limit,
     if (address_str.empty())
     {
         j_response["status"]  = "error";
-        j_response["message"] = "Loki address not provided";
+        j_response["message"] = "Beldex address not provided";
         return j_response;
     }
 
@@ -6115,13 +6115,13 @@ json_outputsblocks(string _limit,
         return j_response;
     }
 
-    // parse string representing given Loki address
+    // parse string representing given Beldex address
     address_parse_info address_info;
 
     if (!lokeg::parse_str_address(address_str, address_info, nettype))
     {
         j_response["status"]  = "error";
-        j_response["message"] = "Cant parse Loki address: " + address_str;
+        j_response["message"] = "Cant parse Beldex address: " + address_str;
         return j_response;
 
     }
@@ -6267,10 +6267,10 @@ json_networkinfo()
     json j_info;
 
     // get basic network info
-    if (!get_loki_network_info(j_info))
+    if (!get_beldex_network_info(j_info))
     {
         j_response["status"]  = "error";
-        j_response["message"] = "Cant get Loki network info";
+        j_response["message"] = "Cant get Beldex network info";
         return j_response;
     }
 
@@ -6360,7 +6360,7 @@ json_version()
             {"last_git_commit_hash", string {GIT_COMMIT_HASH}},
             {"last_git_commit_date", string {GIT_COMMIT_DATETIME}},
             {"git_branch_name"     , string {GIT_BRANCH_NAME}},
-            {"loki_version_full"   , string {BELDEX_VERSION_FULL}},
+            {"beldex_version_full"   , string {BELDEX_VERSION_FULL}},
             {"api"                 , ONIONEXPLORER_RPC_VERSION},
             {"blockchain_height"   , core_storage->get_current_blockchain_height()}
     };
@@ -6740,7 +6740,7 @@ construct_tx_context(transaction tx, uint16_t with_ring_signatures = 0)
             context["have_deregister_info"] = true;
             if (get_master_node_deregister_from_tx_extra(tx.extra, deregister))
             {
-              context["deregister_service_node_index"]   = deregister.master_node_index;
+              context["deregister_master_node_index"]   = deregister.master_node_index;
               context["deregister_block_height"]         = deregister.block_height;
 
               char const vote_array_id[] = "deregister_vote_array";
@@ -6763,7 +6763,7 @@ construct_tx_context(transaction tx, uint16_t with_ring_signatures = 0)
             else
             {
               static std::string unknown = "??";
-              context["deregister_service_node_index"] = unknown;
+              context["deregister_master_node_index"] = unknown;
               context["deregister_block_height"]       = unknown;
             }
         }
@@ -6776,12 +6776,12 @@ construct_tx_context(transaction tx, uint16_t with_ring_signatures = 0)
             crypto::public_key snode_key;
             if (get_master_node_pubkey_from_tx_extra(tx.extra, snode_key))
             {
-              context["register_service_node_pubkey"] = pod_to_hex(snode_key);
+              context["register_master_node_pubkey"] = pod_to_hex(snode_key);
             }
             else
             {
               static std::string parsing_error = "<pubkey parsing error>";
-              context["register_service_node_pubkey"] = parsing_error;
+              context["register_master_node_pubkey"] = parsing_error;
             }
 
             context["have_register_info"]             = true;
@@ -7444,7 +7444,7 @@ get_full_page(const string& middle)
 }
 
 bool
-get_loki_network_info(json& j_info)
+get_beldex_network_info(json& j_info)
 {
     MempoolStatus::network_info local_copy_network_info
         = MempoolStatus::current_network_info;
@@ -7540,7 +7540,7 @@ get_footer()
             {"last_git_commit_hash", string {GIT_COMMIT_HASH}},
             {"last_git_commit_date", string {GIT_COMMIT_DATETIME}},
             {"git_branch_name"     , string {GIT_BRANCH_NAME}},
-            {"loki_version_full"   , string {BELDEX_VERSION_FULL}},
+            {"beldex_version_full"   , string {BELDEX_VERSION_FULL}},
             {"api"                 , std::to_string(ONIONEXPLORER_RPC_VERSION_MAJOR)
                                      + "."
                                      + std::to_string(ONIONEXPLORER_RPC_VERSION_MINOR)},

@@ -1,6 +1,6 @@
-# Onion Loki Blockchain Explorer
+# Onion Beldex Blockchain Explorer
 
-Currently available Loki blockchain explorers have several limitations which are of 
+Currently available Beldex blockchain explorers have several limitations which are of 
 special importance to privacy-oriented users:
 
  - they use JavaScript,
@@ -8,20 +8,20 @@ special importance to privacy-oriented users:
  - track users activates through google analytics,
  - are closed sourced,
  - are not available as hidden services,
- - do not support Loki testnet nor stagenet networks,
+ - do not support Beldex testnet nor stagenet networks,
  - have limited JSON API.
 
 
 In this example, these limitations are addressed by development of
-an Onion Loki Blockchain Explorer. The example not only shows how to use 
-Loki C++ libraries, but also demonstrates how to use:
+an Onion Beldex Blockchain Explorer. The example not only shows how to use 
+Beldex C++ libraries, but also demonstrates how to use:
 
  - [crow](https://github.com/ipkn/crow) - C++ micro web framework
  - [mstch](https://github.com/no1msd/mstch) - C++ {{mustache}} templates
  - [json](https://github.com/nlohmann/json) - JSON for Modern C++
  - [fmt](https://github.com/fmtlib/fmt) - Small, safe and fast string formatting library
 
-## Onion Loki Blockchain Explorer features
+## Onion Beldex Blockchain Explorer features
  - no cookies, no web analytics trackers, no images,
  - by default no JavaScript, but can be enabled for client side decoding and proving transactions,
  - open sourced,
@@ -29,12 +29,12 @@ Loki C++ libraries, but also demonstrates how to use:
  - showing encrypted payments ID,
  - showing ring signatures,
  - showing transaction extra field,
- - showing public components of Loki addresses,
- - decoding which outputs and mixins belong to the given Loki address and viewkey,
- - can prove that you send Loki to someone,
+ - showing public components of Beldex addresses,
+ - decoding which outputs and mixins belong to the given Beldex address and viewkey,
+ - can prove that you send Beldex to someone,
  - detailed information about mixins, such as, mixins' age, timescale, mixin of mixins,
  - showing number of amount output indices,
- - support Loki testnet, stagenet network,
+ - support Beldex testnet, stagenet network,
  - tx checker and pusher for online pushing of transactions,
  - estimate possible spendings based on address and viewkey,
  - can provide total amount of all miner fees,
@@ -46,18 +46,18 @@ Loki C++ libraries, but also demonstrates how to use:
 
 Current development branch:
 
- - https://github.com/doy-lee/onion-loki-blockchain-explorer/tree/loki
+ - https://github.com/doy-lee/onion-beldex-blockchain-explorer/tree/beldex
 
 
 
 ## Compilation on Ubuntu 16.04/18.04
 
-##### Compile latest Loki master version
+##### Compile latest Beldex master version
 
-Download and compile recent Loki into your home folder:
+Download and compile recent Beldex into your home folder:
 
 ```bash
-# first install Loki dependecines
+# first install Beldex dependecines
 sudo apt update
 
 sudo apt install git build-essential cmake libboost-all-dev miniupnpc libunbound-dev graphviz doxygen libunwind8-dev pkg-config libssl-dev libcurl4-openssl-dev libgtest-dev libreadline-dev libzmq3-dev libsodium-dev libhidapi-dev libhidapi-libusb0
@@ -65,27 +65,27 @@ sudo apt install git build-essential cmake libboost-all-dev miniupnpc libunbound
 # go to home folder
 cd ~
 
-git clone --recursive https://github.com/loki-project/loki
+git clone --recursive https://github.com/beldex-project/beldex
 
-cd loki/
+cd beldex/
 
 USE_SINGLE_BUILDDIR=1 make
 ```
 
 ##### Compile and run the explorer
 
-Once the Loki is compiles, the explorer can be downloaded and compiled
+Once the Beldex is compiles, the explorer can be downloaded and compiled
 as follows:
 
 ```bash
-# go to home folder if still in ~/loki
+# go to home folder if still in ~/beldex
 cd ~
 
 # download the source code
-git clone https://github.com/loki-project/onion-loki-blockchain-explorer.git
+git clone https://github.com/beldex-project/onion-beldex-blockchain-explorer.git
 
 # enter the downloaded sourced code folder
-cd onion-loki-blockchain-explorer
+cd onion-beldex-blockchain-explorer
 
 # make a build folder and enter it
 mkdir build && cd build
@@ -93,8 +93,8 @@ mkdir build && cd build
 # create the makefile
 cmake ..
 
-# alternatively can use: cmake -DLOKI_DIR=/path/to/loki ..
-# if loki is not in ~/loki
+# alternatively can use: cmake -DBELDEX_DIR=/path/to/beldex ..
+# if beldex is not in ~/beldex
 #
 # also can build with ASAN (sanitizers), for example
 # cmake -DSANITIZE_ADDRESS=On ..
@@ -113,7 +113,7 @@ To run it:
 ./lokblocks
 ```
 
-By default it will look for blockchain in its default location i.e., `~/.loki/lmdb`.
+By default it will look for blockchain in its default location i.e., `~/.beldex/lmdb`.
 You can use `--bc-path` option if its in different location. 
 Example output:
 
@@ -128,7 +128,7 @@ Go to your browser: http://127.0.0.1:8081
 ## The explorer's command line options
 
 ```
-lokblocks, Onion Loki Blockchain Explorer:
+lokblocks, Onion Beldex Blockchain Explorer:
   -h [ --help ] [=arg(=1)] (=0)         produce help message
   -t [ --testnet ] [=arg(=1)] (=0)      use testnet blockchain
   -s [ --stagenet ] [=arg(=1)] (=0)     use stagenet blockchain
@@ -152,7 +152,7 @@ lokblocks, Onion Loki Blockchain Explorer:
                                         enable users to have the index page on
                                         autorefresh
   --enable-emission-monitor [=arg(=1)] (=0)
-                                        enable Loki total emission monitoring
+                                        enable Beldex total emission monitoring
                                         thread
   -p [ --port ] arg (=8081)             default explorer port
   --testnet-url arg                     you can specify testnet url, if you run
@@ -171,30 +171,30 @@ lokblocks, Onion Loki Blockchain Explorer:
   --mempool-refresh-time arg (=5)       time, in seconds, for each refresh of
                                         mempool state
   -b [ --bc-path ] arg                  path to lmdb folder of the blockchain, 
-                                        e.g., ~/.loki/lmdb
+                                        e.g., ~/.beldex/lmdb
   --ssl-crt-file arg                    path to crt file for ssl (https) 
                                         functionality
   --ssl-key-file arg                    path to key file for ssl (https)
                                         functionality
-  -d [ --daemon-url ] arg (=http:://127.0.0.1:22023)
-                                        Loki daemon url
+  -d [ --daemon-url ] arg (=http:://127.0.0.1:19091)
+                                        Beldex daemon url
 ```
 
 Example usage, defined as bash aliases.
 
 ```bash
 # for mainnet explorer
-alias lokblocksmainnet='~/onion-loki-blockchain-explorer/build/lokblocks    --port 8081 --testnet-url "http://139.162.32.245:8082" --enable-pusher --enable-emission-monitor'
+alias lokblocksmainnet='~/onion-beldex-blockchain-explorer/build/lokblocks    --port 8081 --testnet-url "http://139.162.32.245:8082" --enable-pusher --enable-emission-monitor'
 
 # for testnet explorer
-alias lokblockstestnet='~/onion-loki-blockchain-explorer/build/lokblocks -t --port 8082 --mainnet-url "http://139.162.32.245:8081" --enable-pusher --enable-emission-monitor'
+alias lokblockstestnet='~/onion-beldex-blockchain-explorer/build/lokblocks -t --port 8082 --mainnet-url "http://139.162.32.245:8081" --enable-pusher --enable-emission-monitor'
 ```
 
 These are aliases similar to those used for http://139.162.32.245:8081/ and http://139.162.32.245:8082/, respectively.
 
-## Enable Loki emission 
+## Enable Beldex emission 
 
-Obtaining current Loki emission amount is not straight forward. Thus, by default it is 
+Obtaining current Beldex emission amount is not straight forward. Thus, by default it is 
 disabled. To enable it use `--enable-emission-monitor` flag, e.g., 
 
 
@@ -206,10 +206,10 @@ This flag will enable emission monitoring thread. When started, the thread
  will initially scan the entire blockchain, and calculate the cumulative emission based on each block.
 Since it is a separate thread, the explorer will work as usual during this time. 
 Every 10000 blocks, the thread will save current emission in a file, by default, 
- in `~/.loki/lmdb/emission_amount.txt`. For testnet or stagenet networks, 
- it is `~/.loki/testnet/lmdb/emission_amount.txt` or `~/.loki/stagenet/lmdb/emission_amount.txt`. This file is used so that we don't
+ in `~/.beldex/lmdb/emission_amount.txt`. For testnet or stagenet networks, 
+ it is `~/.beldex/testnet/lmdb/emission_amount.txt` or `~/.beldex/stagenet/lmdb/emission_amount.txt`. This file is used so that we don't
  need to rescan entire blockchain whenever the explorer is restarted. When the 
- explorer restarts, the thread will first check if `~/.loki/lmdb/emission_amount.txt`
+ explorer restarts, the thread will first check if `~/.beldex/lmdb/emission_amount.txt`
  is present, read its values, and continue from there if possible. Subsequently, only the initial
  use of the tread is time consuming. Once the thread scans the entire blockchain, it updates
  the emission amount using new blocks as they come. Since the explorer writes this file, there can
@@ -223,10 +223,10 @@ Every 10000 blocks, the thread will save current emission in a file, by default,
  displayed on the front page, e.g., :
 
 ```
-Loki emission (fees) is 14485540.430 (52545.373) as of 1313448 block
+Beldex emission (fees) is 14485540.430 (52545.373) as of 1313448 block
 ```
 
-The values given, can be checked using Loki daemon's  `print_coinbase_tx_sum` command. 
+The values given, can be checked using Beldex daemon's  `print_coinbase_tx_sum` command. 
 For example, for the above example: `print_coinbase_tx_sum 0 1313449`.
 
 To disable the monitor, simply restart the explorer without `--enable-emission-monitor` flag.
@@ -733,10 +733,10 @@ curl  -w "\n" -X GET "http://127.0.0.1:8081/api/version"
   "data": {
     "api": 65536,
     "blockchain_height": 1357031,
-    "git_branch_name": "update_to_current_loki",
+    "git_branch_name": "update_to_current_beldex",
     "last_git_commit_date": "2017-07-25",
     "last_git_commit_hash": "a549f25",
-    "loki_version_full": "0.10.3.1-ab594cfe"
+    "beldex_version_full": "0.10.3.1-ab594cfe"
   },
   "status": "success"
 }
@@ -753,7 +753,7 @@ var api_minor = response.data.api & 0xffff;
 
 #### api/rawblock/<block_number|block_hash>
 
-Return raw json block data, as represented in Loki.
+Return raw json block data, as represented in Beldex.
 
 ```bash
 curl  -w "\n" -X GET "http://139.162.32.245:8081/api/rawblock/1293257"
@@ -763,7 +763,7 @@ Example result not shown.
 
 #### api/rawtransaction/<tx_hash>
 
-Return raw json tx data, as represented in Loki.
+Return raw json tx data, as represented in Beldex.
 
 ```bash
 curl  -w "\n" -X GET "http://139.162.32.245:8081/api/rawtransaction/6093260dbe79fd6277694d14789dc8718f1bd54457df8bab338c2efa3bb0f03d"

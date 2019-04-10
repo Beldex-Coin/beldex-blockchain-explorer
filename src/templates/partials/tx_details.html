@@ -56,7 +56,7 @@
     {{#have_deregister_info}}
         <h2>Master Node Deregister Metadata</h2>
         <div class="TitleDivider"></div>
-        <p>Master Node Index: {{deregister_service_node_index}}</p>
+        <p>Master Node Index: {{deregister_master_node_index}}</p>
         <p>Block Height: {{deregister_block_height}}</p>
 
         <table class="Table">
@@ -77,7 +77,7 @@
     {{#have_register_info}}
         <h2>Master Node Register Metadata</h2>
         <div class="TitleDivider"></div>
-        <p>Master Node Public Key: {{register_service_node_pubkey}}</p>
+        <p>Master Node Public Key: {{register_master_node_pubkey}}</p>
         <p>Portions For Operator: {{register_portions_for_operator}}%</p>
         <p>Expiration Timestamp: {{register_expiration_timestamp_friendly}} ({{register_expiration_timestamp}}) or {{register_expiration_timestamp_relative}}</p>
         <p>Signature: {{register_signature}}</p>

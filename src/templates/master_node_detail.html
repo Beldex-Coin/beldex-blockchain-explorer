@@ -27,7 +27,7 @@
     </table>
 
     <div class="TitleDivider"></div>
-    <p style="margin: 0px"> {{service_node_registered_text}} </p>
+    <p style="margin: 0px"> {{master_node_registered_text}} </p>
 
     <h2>{{num_contributors}} Contributor(s)</h2>
     <div class="TitleDivider"></div>
@@ -39,12 +39,12 @@
             <td>Reserved</td>
         </tr>
 
-        {{#service_node_contributors_array}}
+        {{#master_node_contributors_array}}
         <tr>
             <td>{{address}}</td>
             <td>{{amount}}</td>
             <td>{{reserved}}</td>
         </tr>
-        {{/service_node_contributors_array}}
+        {{/master_node_contributors_array}}
     </table>
 </div>

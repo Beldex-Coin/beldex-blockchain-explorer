@@ -444,13 +444,13 @@ CurrentBlockchainStatus::is_thread_running()
    return is_running;
 }
 
-bf::path CurrentBlockchainStatus::blockchain_path {"/home/mwo/.loki/lmdb"};
+bf::path CurrentBlockchainStatus::blockchain_path {"/home/mwo/.beldex/lmdb"};
 
 cryptonote::network_type CurrentBlockchainStatus::nettype {cryptonote::network_type::MAINNET};
 
 string CurrentBlockchainStatus::output_file {"emission_amount.txt"};
 
-string CurrentBlockchainStatus::daemon_url {"http:://127.0.0.1:22023"};
+string CurrentBlockchainStatus::daemon_url {"http:://127.0.0.1:29091"};
 
 uint64_t  CurrentBlockchainStatus::blockchain_chunk_size {10000};
 uint64_t  CurrentBlockchainStatus::circulating_supply {DAY_0_CIRC_SUPPLY};

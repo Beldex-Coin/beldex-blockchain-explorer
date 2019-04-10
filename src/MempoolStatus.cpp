@@ -350,8 +350,8 @@ MempoolStatus::is_thread_running()
     return is_running;
 }
 
-bf::path MempoolStatus::blockchain_path {"/home/mwo/.loki/lmdb"};
-string MempoolStatus::daemon_url {"http:://127.0.0.1:22023"};
+bf::path MempoolStatus::blockchain_path {"/home/mwo/.beldex/lmdb"};
+string MempoolStatus::daemon_url {"http:://127.0.0.1:29091"};
 cryptonote::network_type MempoolStatus::nettype {cryptonote::network_type::MAINNET};
 atomic<bool>       MempoolStatus::is_running {false};
 boost::thread      MempoolStatus::m_thread;
@@ -363,5 +363,5 @@ atomic<uint64_t> MempoolStatus::mempool_no {0};   // no of txs
 atomic<uint64_t> MempoolStatus::mempool_size {0}; // size in bytes.
 uint64_t MempoolStatus::mempool_refresh_time {10};
 mutex MempoolStatus::mempool_mutx;
-MempoolStatus::service_node_state MempoolStatus::node_state = {};
+MempoolStatus::master_node_state MempoolStatus::node_state = {};
 }
