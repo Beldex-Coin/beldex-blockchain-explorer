@@ -23,7 +23,7 @@ set(BELDEX_SOURCE_DIR ${BELDEX_DIR}
         CACHE PATH "Path to the root directory for Beldex")
 
 # set location of beldex build tree
-set(BELDEX_BUILD_DIR ${BELDEX_SOURCE_DIR}/build/Linux/dev/release/
+set(BELDEX_BUILD_DIR ${BELDEX_SOURCE_DIR}/build/Linux/master/release/
         CACHE PATH "Path to the build directory for Beldex")
 
 set(MY_CMAKE_DIR "${CMAKE_CURRENT_LIST_DIR}/cmake"

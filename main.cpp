@@ -746,7 +746,8 @@ main(int ac, const char* av[])
             return r;
         });
 
-        CROW_ROUTE(app, "/api/circulating_supply") ([&]() {
+        //CROW_ROUTE(app, "/api/circulating_supply") ([&]() {
+        CROW_ROUTE(app, "/api/total_supply") ([&]() {
             std::string result = std::to_string(lokeg::CurrentBlockchainStatus::circulating_supply);
             return std::move(result);
         });

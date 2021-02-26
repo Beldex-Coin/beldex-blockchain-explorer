@@ -13,7 +13,7 @@
 namespace lokeg
 {
 
-static const uint64_t DAY_0_CIRC_SUPPLY = 15606500;
+static const uint64_t DAY_0_CIRC_SUPPLY = 0;
 using namespace std;
 
 void
@@ -33,8 +33,10 @@ struct LockedAmounts
 #define DAY_TO_S(time)    (HOUR_TO_S(time) * 24ULL)
 #define HOUR_TO_S(time)   (MINUTE_TO_S(time) * 60ULL)
 #define MINUTE_TO_S(time) ((time) * 60ULL)
-uint64_t const founders_locked_tokens            = 1215000;
-uint64_t const seed_locked_tokens                = 581000;
+//uint64_t const founders_locked_tokens            = 1215000;
+uint64_t const founders_locked_tokens            = 1;
+//uint64_t const seed_locked_tokens                = 581000;
+uint64_t const seed_locked_tokens                = 1;
 uint64_t const half_seed_locked_tokens           = seed_locked_tokens * 0.5f;
 static int locked_tx_end_timestamps_index        = 0;
 static LockedAmounts const locked_tx_end_timestamps[] =
