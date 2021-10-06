@@ -1,4 +1,4 @@
-# Onion Beldex Blockchain Explorer
+# Beldex Blockchain Explorer
 
 Currently available Beldex blockchain explorers have several limitations which are of 
 special importance to privacy-oriented users:
